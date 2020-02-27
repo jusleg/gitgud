@@ -1,0 +1,46 @@
+#!/usr/bin/env ruby
+
+require 'cli/ui'
+
+def try_to_push_this_thing(spinner)
+  counter = 1
+  while !system("git push #{all_of_the_args}")
+    spinner.update_title(spinner_title(counter))
+    counter += 1
+  end
+  spinner.update_title('Successfully git pushed')
+end
+
+def spinner_title(attempt_number = 1)
+  if attempt_number == 1
+    'Attempting git push'
+  else
+    "Attempting git push (Attempt ##{attempt_number})"
+  end
+end
+
+def plz_push_my_thing_on_git_thx_k_bye
+  CLI::UI::StdoutRouter.enable
+  spin_group = CLI::UI::SpinGroup.new
+  spin_group.add(spinner_title)   { |spinner| try_to_push_this_thing(spinner) }
+  spin_group.wait
+end
+
+def default_to_using_the_plain_git
+  system("git #{all_of_the_args}")
+end
+
+def all_of_the_args
+  ARGV.join(" ")
+end
+
+def run_da_whole_show
+  if ARGV[0] == 'push'
+    ARGV.shift
+    plz_push_my_thing_on_git_thx_k_bye
+  else
+    default_to_using_the_plain_git
+  end
+end
+
+run_da_whole_show
