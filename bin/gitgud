@@ -4,7 +4,7 @@ require 'cli/ui'
 
 def try_to_push_this_thing(spinner)
   counter = 1
-  while !system("git push #{all_of_the_args}")
+  while !system('git', 'push', *ARGV)
     spinner.update_title(spinner_title(counter))
     counter += 1
   end
@@ -27,11 +27,7 @@ def plz_push_my_thing_on_git_thx_k_bye
 end
 
 def default_to_using_the_plain_git
-  system("git #{all_of_the_args}")
-end
-
-def all_of_the_args
-  ARGV.join(" ")
+  system('git', *ARGV)
 end
 
 def run_da_whole_show
