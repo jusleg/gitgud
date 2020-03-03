@@ -1,8 +1,8 @@
-# gitgud ![gitgud badge](https://img.shields.io/badge/gitgud%3F-good-brightgreen)
+# gitgud ![gitgud badge](https://img.shields.io/badge/gitgud%3F-good-brightgreen) [![Gem Version](https://badge.fury.io/rb/gitgud.svg)](https://badge.fury.io/rb/gitgud)
 
 When things go wrong, you need to `gitgud`. `gitgud` acts just like `git`, but gives you superpowers when trying to `git push`. It will attempt to `git push` until it succeeds.
 
-![gitgud](https://user-images.githubusercontent.com/4406751/75472054-f3c92680-5960-11ea-9eaa-eff24eb4dfe4.gif)
+![success after multiple retries](https://user-images.githubusercontent.com/4406751/75736774-1c884d80-5ccc-11ea-9e2c-5436937d38ed.gif)
 
 
 ## `gitgud` is the new `git`
