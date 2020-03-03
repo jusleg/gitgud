@@ -1,14 +1,26 @@
 #!/usr/bin/env ruby
 
 require 'cli/ui'
+require 'open3'
 
 def try_to_push_this_thing(spinner)
   counter = 1
-  while !system('git', 'push', *ARGV)
+  while counter <= 20
     spinner.update_title(spinner_title(counter))
     counter += 1
+
+    output, status = Open3.capture2e('git', 'push', *ARGV)
+
+    if status.success?
+      return spinner.update_title("Successfully git pushed")
+    elsif !output.match?(/remote: Internal Server Error\sEverything up-to-date/)
+      spinner.update_title("Encountered error while git pushing\n#{output}")
+      return :task_failed
+    end
   end
-  spinner.update_title('Successfully git pushed')
+
+  spinner.update_title("Unsuccessful after 20 attemps")
+  :task_failed
 end
 
 def spinner_title(attempt_number = 1)
@@ -21,7 +33,7 @@ end
 
 def plz_push_my_thing_on_git_thx_k_bye
   CLI::UI::StdoutRouter.enable
-  spin_group = CLI::UI::SpinGroup.new
+  spin_group = CLI::UI::SpinGroup.new(auto_debrief: false)
   spin_group.add(spinner_title)   { |spinner| try_to_push_this_thing(spinner) }
   spin_group.wait
 end
