@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name        = 'gitgud'
-  s.version     = '0.1.2'
-  s.date        = '2020-02-27'
+  s.version     = '0.1.3'
+  s.date        = '2021-12-01'
   s.summary     = 'When things go wrong, you need to gitgud'
   s.description = 'Retry git push until it succeeds'
   s.author      = 'Justin Leger'
