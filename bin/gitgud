@@ -3,23 +3,25 @@
 require 'cli/ui'
 require 'open3'
 
+$output = nil
+
 def try_to_push_this_thing(spinner)
   counter = 1
   while counter <= 20
     spinner.update_title(spinner_title(counter))
     counter += 1
 
-    output, status = Open3.capture2e('git', 'push', *ARGV)
+    $output, status = Open3.capture2e('git', 'push', *ARGV)
 
     if status.success?
       return spinner.update_title("Successfully git pushed")
-    elsif !output.match?(/remote: Internal Server Error\sEverything up-to-date/)
-      spinner.update_title("Encountered error while git pushing\n#{output}")
+    elsif !$output.match?(/remote: Internal Server Error\sEverything up-to-date/)
+      spinner.update_title("Encountered error while git pushing\n#{$output}")
       return :task_failed
     end
   end
 
-  spinner.update_title("Unsuccessful after 20 attemps")
+  spinner.update_title("Unsuccessful after 20 attempts")
   :task_failed
 end
 
@@ -45,7 +47,10 @@ end
 def run_da_whole_show
   if ARGV[0] == 'push'
     ARGV.shift
+    CLI::UI::Frame.open('Gittin gud')
     plz_push_my_thing_on_git_thx_k_bye
+    CLI::UI::Printer.puts($output) unless $output.nil?
+    CLI::UI::Frame.close('')
   else
     default_to_using_the_plain_git
   end
